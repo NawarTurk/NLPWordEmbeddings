@@ -21,8 +21,8 @@ import random
 model = api.load("word2vec-google-news-300")
 
 # Testing the model
-print(model.similarity("actress", "actor"))
-print(model.similarity("actor", "banana"))
+# print(model.similarity("actress", "actor"))
+# print(model.similarity("actor", "banana"))
 
 with open('data_set/synonym.json', 'r') as file:
   data_set = json.load(file)
