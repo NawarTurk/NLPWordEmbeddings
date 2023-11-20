@@ -1,5 +1,8 @@
 # pip install gensim
-# Run this in the terminal and do not include it in the code if you are using an IDE
+# Run this in the terminal
+
+# pip install matplotlib
+# Run this in the terminal to install matplotlib for drawing the barcharts (used for analysing the data)
 
 # pip show gensim
 # Use it to make sure that you have downloaded Gensim library properly
@@ -7,6 +10,21 @@
 import gensim.downloader as api
 import json
 import random
+import os
+import matplotlib.pyplot as plt
+
+
+folder_name = 'reports'
+if not os.path.exists(folder_name):
+    os.makedirs(folder_name)
+
+with open('data_set/synonym.json', 'r') as file:
+  data_set = json.load(file)
+
+reports_file_path = os.path.join(folder_name, 'analysis.csv')
+with open(reports_file_path, 'w') as file:
+  file.write('Model Name,Size of Vocabulary,#Correct Labels,Model Accuracy\n')
+
 
 models = {
     "word2vec-google-news-300": None, 
@@ -20,17 +38,12 @@ for model_name in models.keys():
   models[model_name] = api.load(model_name)
   print(f'{model_name} has been successfylly downloaded')
 
-
-with open('data_set/synonym.json', 'r') as file:
-  data_set = json.load(file)
-
-with open('analysis.csv', 'w') as file:
-  file.write('Model Name,Size of Vocabulary,#Correct Labels,Model Accuracy\n')
-
 model_stats = {}
 
+
 for model_name, model in models.items():
-  with open(f'{model_name}-details.csv', 'w') as file:
+  file_path = os.path.join(folder_name, f'{model_name}-details.csv')
+  with open(file_path, 'w') as file:
     file.write("#,question_word,correct_answer_word,system_guess_word,label\n")
     i = 1
     correct_guesses_counter = 0
@@ -69,9 +82,45 @@ for model_name, model in models.items():
   if (correct_guesses_counter + wrong_guesses_counter) > 0:
     model_accuracy = correct_guesses_counter / (correct_guesses_counter + wrong_guesses_counter) 
 
-  model_stats[model_name] = {"accuracy": model_accuracy, "total_model_guesses": correct_guesses_counter + wrong_guesses_counter} # for analyzing the data later
+  model_stats[model_name] = {"accuracy": model_accuracy, "total_correct_words": correct_guesses_counter, "total_model_guesses": correct_guesses_counter + wrong_guesses_counter} # for analyzing the data later
 
-  with open('analysis.csv', 'a') as file:
+  with open(reports_file_path, 'a') as file:
     file.write(f'{model_name},{vocab_size},{correct_guesses_counter},{model_accuracy*100:.1f}%\n')
 
 print(f'The analysis.csv has been sucessfully generated')
+
+
+model_names = list(model_stats.keys())
+accuracy = [model_stats[model]['accuracy'] for model in model_names]
+total_correct_words = [model_stats[model]['total_correct_words'] for model in model_names]
+total_model_guesses = [model_stats[model]['total_model_guesses'] for model in model_names]
+
+plt.figure(figsize=(14, 6))
+
+# Accuracy Bar Chart
+plt.subplot(1, 3, 1)
+plt.bar(model_names, accuracy, color='skyblue')
+plt.title('Model Accuracy Comparison')
+plt.xlabel('Model')
+plt.ylabel('Accuracy')
+plt.xticks(rotation=45)
+
+# Total Model Guesses Bar Chart
+plt.subplot(1, 3, 2)
+plt.bar(model_names, total_correct_words, color='lightgreen')
+plt.title('Total Model Correct Words Comparison')
+plt.xlabel('Model')
+plt.ylabel('Total Correct Words')
+plt.xticks(rotation=45)
+
+# Total Model Guesses Bar Chart
+plt.subplot(1, 3,3)
+plt.bar(model_names, total_model_guesses, color='salmon')
+plt.title('Total Model Guesses Comparison')
+plt.xlabel('Model')
+plt.ylabel('Total Model Guesses')
+plt.xticks(rotation=45)
+
+plt.tight_layout()
+plt.savefig('model_comparison_charts.png')
+plt.show()
