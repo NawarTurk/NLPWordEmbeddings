@@ -7,10 +7,10 @@ Original file is located at
     https://colab.research.google.com/drive/1FngftDMqw-VeSJxtIw2mE3hkRKwLB7qB
 """
 
-# !pip install gensim
+# pip install gensim
 # Run this in the terminal and do not include it in the code if you are using an IDE
 
-# !pip show gensim
+# pip show gensim
 # Use it to make sure that you have downloaded Gensim library properly
 
 import gensim.downloader as api
@@ -21,8 +21,8 @@ import random
 model = api.load("word2vec-google-news-300")
 
 # Testing the model
-print(model.similarity("actress", "actor"))
-print(model.similarity("actor", "banana"))
+# print(model.similarity("actress", "actor"))
+# print(model.similarity("actor", "banana"))
 
 with open('data_set/synonym.json', 'r') as file:
   data_set = json.load(file)
