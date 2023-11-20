@@ -26,6 +26,26 @@ with open(reports_file_path, 'w') as file:
   file.write('Model Name,Size of Vocabulary,#Correct Labels,Model Accuracy\n')
 
 
+model_names = [
+    "word2vec-google-news-300",
+    "glove-wiki-gigaword-300",
+    "fasttext-wiki-news-subwords-300",
+    "glove-twitter-50",
+    "glove-twitter-25"
+]
+
+# models = {}
+
+# for model_name in model_names:
+#     try:
+#         # Attempt to load the model from the gensim cache
+#         models[model_name] = api.load(model_name, return_path=False)
+#         print(f'{model_name} is already downloaded.')
+#     except ValueError:
+#         # Model not found in cache, download it
+#         models[model_name] = api.load(model_name)
+#         print(f'{model_name} has been successfully downloaded')
+
 models = {
     "word2vec-google-news-300": None, 
     "glove-wiki-gigaword-300": None,  # trained on Wikipedia + Gigaword.
@@ -38,9 +58,8 @@ for model_name in models.keys():
   models[model_name] = api.load(model_name)
   print(f'{model_name} has been successfylly downloaded')
 
+
 model_stats = {}
-
-
 for model_name, model in models.items():
   file_path = os.path.join(folder_name, f'{model_name}-details.csv')
   with open(file_path, 'w') as file:
@@ -103,7 +122,7 @@ plt.bar(model_names, accuracy, color='skyblue')
 plt.title('Model Accuracy Comparison')
 plt.xlabel('Model')
 plt.ylabel('Accuracy')
-plt.xticks(rotation=45)
+plt.xticks(rotation=90)
 
 # Total Model Guesses Bar Chart
 plt.subplot(1, 3, 2)
@@ -111,7 +130,7 @@ plt.bar(model_names, total_correct_words, color='lightgreen')
 plt.title('Total Model Correct Words Comparison')
 plt.xlabel('Model')
 plt.ylabel('Total Correct Words')
-plt.xticks(rotation=45)
+plt.xticks(rotation=90)
 
 # Total Model Guesses Bar Chart
 plt.subplot(1, 3,3)
@@ -119,7 +138,7 @@ plt.bar(model_names, total_model_guesses, color='salmon')
 plt.title('Total Model Guesses Comparison')
 plt.xlabel('Model')
 plt.ylabel('Total Model Guesses')
-plt.xticks(rotation=45)
+plt.xticks(rotation=90)
 
 plt.tight_layout()
 plt.savefig('model_comparison_charts.png')
