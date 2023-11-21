@@ -4,19 +4,40 @@
 # pip install matplotlib
 # Run this in the terminal to install matplotlib for drawing the barcharts (used for analysing the data)
 
-#pip install huggingface_hub
-
-# optional
 # pip show gensim
 # Use it to make sure that you have downloaded Gensim library properly
+
+#pip install huggingface_hub
+
 
 import gensim.downloader as api
 import json
 import random
 import os
 import matplotlib.pyplot as plt
+
 from gensim.models import KeyedVectors
 from huggingface_hub import hf_hub_download
+
+# Load the nlpl_5 model
+nlpl_5_model_path = hf_hub_download(repo_id="Word2vec/nlpl_5", filename="model.bin")
+nlpl_5_model = KeyedVectors.load_word2vec_format(nlpl_5_model_path, binary=True)
+
+# Load the nlpl_222 model
+nlpl_222_model_path = hf_hub_download(repo_id="Word2vec/nlpl_222", filename="model.bin")
+nlpl_222_model = KeyedVectors.load_word2vec_format(nlpl_222_model_path, binary=True)
+
+# Words to compare
+word1 = "king"
+word2 = "queen"
+
+# Check similarity in nlpl_5 model
+similarity_nlpl_5 = nlpl_5_model.similarity(word1, word2)
+print(f"Similarity between '{word1}' and '{word2}' in nlpl_5 model: {similarity_nlpl_5}")
+
+# Check similarity in nlpl_222 model
+similarity_nlpl_222 = nlpl_222_model.similarity(word1, word2)
+print(f"Similarity between '{word1}' and '{word2}' in nlpl_222 model: {similarity_nlpl_222}")
 
 
 folder_name = 'reports'
@@ -31,34 +52,38 @@ with open(reports_file_path, 'w') as file:
   file.write('Model Name,Size of Vocabulary,#Correct Labels,Model Accuracy\n')
 
 
+model_names = [
+    "word2vec-google-news-300",
+    "glove-wiki-gigaword-300",
+    "fasttext-wiki-news-subwords-300",
+    "glove-twitter-50",
+    "glove-twitter-25"
+]
+
+# models = {}
+
+# for model_name in model_names:
+#     try:
+#         # Attempt to load the model from the gensim cache
+#         models[model_name] = api.load(model_name, return_path=False)
+#         print(f'{model_name} is already downloaded.')
+#     except ValueError:
+#         # Model not found in cache, download it
+#         models[model_name] = api.load(model_name)
+#         print(f'{model_name} has been successfully downloaded')
+
 models = {
     "word2vec-google-news-300": None, 
-    # "glove-wiki-gigaword-300": None,  # trained on Wikipedia + Gigaword.
-    # "fasttext-wiki-news-subwords-300": None,  # trained on Common Crawl.
-    # "glove-twitter-50": None,  # trained on a dataset composed of tweets. 
-    # "glove-twitter-25": None  # trained on a dataset composed of tweets. 
+    "glove-wiki-gigaword-300": None,  # trained on Wikipedia + Gigaword.
+    "fasttext-wiki-news-subwords-300": None,  # trained on Common Crawl.
+    "glove-twitter-50": None,  # trained on a dataset composed of tweets. 
+    "glove-twitter-25": None  # trained on a dataset composed of tweets. 
 }
 
 for model_name in models.keys():
   models[model_name] = api.load(model_name)
   print(f'{model_name} has been successfylly downloaded')
 
-# Load the nlpl_5 model
-# Nordic Language Processing Laboratory
-# This model is trained on the English Wikipedia Dump of February 2017.
-nlpl_5_model_path = hf_hub_download(repo_id="Word2vec/nlpl_5", filename="model.bin")
-models['nlpl_5_model-300'] = KeyedVectors.load_word2vec_format(nlpl_5_model_path, binary=True)
-print('lpl_5_model-300 has been successfylly downloaded')
-
-
-# Load the nlpl_222 model
-# Nordic Language Processing Laboratory
-# This model is trained on the English Wikipedia Dump of November 2021.
-nlpl_222_model_path = hf_hub_download(repo_id="Word2vec/nlpl_222", filename="model.bin")
-models['lpl_222_model-300'] = KeyedVectors.load_word2vec_format(nlpl_222_model_path, binary=True)
-print('lpl_222_model-300 has been successfylly downloaded')
-
-print("\n********************\n")
 
 model_stats = {}
 for model_name, model in models.items():
@@ -96,6 +121,7 @@ for model_name, model in models.items():
       i+=1
   print(f'{model_name}-details.csv has been sucessfully generated')
 
+
   vocab_size = len(model.key_to_index)
   model_accuracy = 0
   if (correct_guesses_counter + wrong_guesses_counter) > 0:
@@ -106,7 +132,6 @@ for model_name, model in models.items():
   with open(reports_file_path, 'a') as file:
     file.write(f'{model_name},{vocab_size},{correct_guesses_counter},{model_accuracy*100:.1f}%\n')
 
-print("\n********************\n")
 print(f'The analysis.csv has been sucessfully generated')
 
 

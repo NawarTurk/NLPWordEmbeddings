@@ -1,6 +1,4 @@
 Model Name,Size of Vocabulary,#Correct Labels,Model Accuracy
 word2vec-google-news-300,3000000,70,88.6%
-glove-wiki-gigaword-300,400000,71,88.8%
-fasttext-wiki-news-subwords-300,999999,74,92.5%
-glove-twitter-50,1193514,36,46.2%
-glove-twitter-25,1193514,36,46.2%
+nlpl_5_model-300,273992,51,83.6%
+lpl_222_model-300,199807,64,81.0%
