@@ -43,16 +43,14 @@ for model_name in models.keys():
   models[model_name] = api.load(model_name)
   print(f'{model_name} has been successfylly downloaded')
 
-# Load the nlpl_5 model
-# Nordic Language Processing Laboratory
+# Load the nlpl_5 model, Nordic Language Processing Laboratory
 # This model is trained on the English Wikipedia Dump of February 2017.
 nlpl_5_model_path = hf_hub_download(repo_id="Word2vec/nlpl_5", filename="model.bin")
 models['nlpl_5_model-300'] = KeyedVectors.load_word2vec_format(nlpl_5_model_path, binary=True)
-print('lpl_5_model-300 has been successfylly downloaded')
+print('nlpl_5_model-300 has been successfylly downloaded')
 
 
-# Load the nlpl_222 model
-# Nordic Language Processing Laboratory
+# Load the nlpl_222 model, Nordic Language Processing Laboratory
 # This model is trained on the English Wikipedia Dump of November 2021.
 nlpl_222_model_path = hf_hub_download(repo_id="Word2vec/nlpl_222", filename="model.bin")
 models['lpl_222_model-300'] = KeyedVectors.load_word2vec_format(nlpl_222_model_path, binary=True)
@@ -94,6 +92,7 @@ for model_name, model in models.items():
 
       file.write(f"{i},{question_word},{correct_answer_word},{system_guess_word},{label}\n")
       i+=1
+
   print(f'{model_name}-details.csv has been sucessfully generated')
 
   vocab_size = len(model.key_to_index)
@@ -117,6 +116,8 @@ total_model_guesses = [model_stats[model]['total_model_guesses'] for model in mo
 
 plt.figure(figsize=(14, 6))
 
+
+
 # Accuracy Bar Chart
 plt.subplot(1, 3, 1)
 plt.bar(model_names, accuracy, color='skyblue')
@@ -124,6 +125,10 @@ plt.title('Model Accuracy Comparison')
 plt.xlabel('Model')
 plt.ylabel('Accuracy')
 plt.xticks(rotation=90)
+
+# Adding a horizontal line for the Human Gold-Standard at 88.5%
+plt.axhline(y=0.885, color='r', linestyle='-', label='Human Gold-Standard')
+plt.legend()
 
 # Total Model Guesses Bar Chart
 plt.subplot(1, 3, 2)
