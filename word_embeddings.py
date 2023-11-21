@@ -53,8 +53,8 @@ print('nlpl_5_model-300 has been successfylly downloaded')
 # Load the nlpl_222 model, Nordic Language Processing Laboratory
 # This model is trained on the English Wikipedia Dump of November 2021.
 nlpl_222_model_path = hf_hub_download(repo_id="Word2vec/nlpl_222", filename="model.bin")
-models['lpl_222_model-300'] = KeyedVectors.load_word2vec_format(nlpl_222_model_path, binary=True)
-print('lpl_222_model-300 has been successfylly downloaded')
+models['nlpl_222_model-300'] = KeyedVectors.load_word2vec_format(nlpl_222_model_path, binary=True)
+print('nlpl_222_model-300 has been successfylly downloaded')
 
 print("\n********************\n")
 
