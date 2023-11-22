@@ -35,8 +35,8 @@ models = {
     "word2vec-google-news-300": None, 
     # "glove-wiki-gigaword-300": None,  # trained on Wikipedia + Gigaword.
     # "fasttext-wiki-news-subwords-300": None,  # trained on Common Crawl.
-    # "glove-twitter-50": None,  # trained on a dataset composed of tweets. 
-    # "glove-twitter-25": None  # trained on a dataset composed of tweets. 
+    "glove-twitter-50": None,  # trained on a dataset composed of tweets. 
+    "glove-twitter-25": None  # trained on a dataset composed of tweets. 
 }
 
 for model_name in models.keys():
@@ -71,6 +71,7 @@ for model_name, model in models.items():
       question_word = entry["question"]
       choices = entry["choices"]
       correct_answer_word = entry["answer"]
+      
       label = "guess"
       similarities = {}
 
@@ -128,6 +129,10 @@ plt.xticks(rotation=90)
 
 # Adding a horizontal line for the Human Gold-Standard at 88.5%
 plt.axhline(y=0.885, color='r', linestyle='-', label='Human Gold-Standard')
+plt.legend()
+
+# Adding a horizontal line for the Human Gold-Standard at 88.5%
+plt.axhline(y=0.25, color='y', linestyle='-', label='Ransom Baseline')
 plt.legend()
 
 # Total Model Guesses Bar Chart
