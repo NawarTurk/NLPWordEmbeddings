@@ -1,0 +1,10 @@
+# will be too big for github
+books/
+
+# ignoring these so they can be generated fresh and new each run
+model_comparison_charts.png
+reports/
+
+# mac file thing
+.DS_Store
+
