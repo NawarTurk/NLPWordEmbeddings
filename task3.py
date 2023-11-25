@@ -31,10 +31,10 @@ print('\n -- model training : STARTING')
 print(' -- creating the four new word2vec models..')
 
 # chosen params for models (experimenting pretty much)
-windowsize1 = 7
-windowsize2 = 14
-embeddingsize5 = 77
-embeddingsize6 = 333
+windowsize1 = 13
+windowsize2 = 37
+embeddingsize5 = 99
+embeddingsize6 = 373
 
 # create 4 word2vec models using the processed data from books and the above paramerters
 w1e5 = gensim.models.Word2Vec(sentences=preprocessed, window=windowsize1, vector_size=embeddingsize5)
