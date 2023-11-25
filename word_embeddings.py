@@ -11,6 +11,7 @@
 # Use it to make sure that you have downloaded Gensim library properly
 
 import gensim.downloader as api
+import gensim
 import json
 import random
 import os
@@ -18,21 +19,26 @@ import matplotlib.pyplot as plt
 from gensim.models import KeyedVectors
 from huggingface_hub import hf_hub_download
 
-
+# MAKE REPORT FOLDER IF IT DOESN"T EXIST YET
 folder_name = 'reports'
 if not os.path.exists(folder_name):
     os.makedirs(folder_name)
 
+# LOAD DATASET FROM .json FILE
 with open('data_set/synonym.json', 'r') as file:
   data_set = json.load(file)
 
+# MAKE analysis.csv FILE AND WRITE COLUMN NAMES
 reports_file_path = os.path.join(folder_name, 'analysis.csv')
 with open(reports_file_path, 'w') as file:
   file.write('Model Name,Size of Vocabulary,#Correct Labels,Model Accuracy\n')
 
-
+# LOAD MODELS
 models = {
-    "word2vec-google-news-300": None, 
+    # TASK 1:
+    "word2vec-google-news-300": None,
+
+    # TASK 2:
     # "glove-wiki-gigaword-300": None,  # trained on Wikipedia + Gigaword.
     # "fasttext-wiki-news-subwords-300": None,  # trained on Common Crawl.
     "glove-twitter-50": None,  # trained on a dataset composed of tweets. 
@@ -56,6 +62,17 @@ nlpl_222_model_path = hf_hub_download(repo_id="Word2vec/nlpl_222", filename="mod
 models['nlpl_222_model-300'] = KeyedVectors.load_word2vec_format(nlpl_222_model_path, binary=True)
 print('nlpl_222_model-300 has been successfylly downloaded')
 
+# TASK 3
+task3models = os.listdir('./task3models/')
+try:
+  for model_file in task3models:
+    model_name = model_file.rsplit('.', 1)[0]
+    model = gensim.models.Word2Vec.load('./task3models/' + model_file)
+    models[model_name] = model.wv
+
+except:
+  print('\n -- task 3 models not trained yet..\n!! RUN task3.py FIRST !!\n')
+
 print("\n********************\n")
 
 model_stats = {}
@@ -74,11 +91,13 @@ for model_name, model in models.items():
       
       label = "guess"
       similarities = {}
-
+      
+      # IF QUESTION WORD IN MODEL
       if question_word in model:
         for choice in choices:
           if choice in model:
             similarities[choice] = model.similarity(question_word, choice)
+        # IF AT LEAST ONE CHOICE IN MODEL
         if  len(similarities) > 0:
           system_guess_word = max(similarities, key=similarities.get)
           if system_guess_word == correct_answer_word:
@@ -87,10 +106,11 @@ for model_name, model in models.items():
           else:
             label = 'wrong'
             wrong_guesses_counter += 1
-
+      # OTHERWISE, STILL A GUESS
       if label == 'guess':
         system_guess_word = random.choice(choices)
 
+      # WRITE TO MODEL REPORT
       file.write(f"{i},{question_word},{correct_answer_word},{system_guess_word},{label}\n")
       i+=1
 
@@ -103,6 +123,7 @@ for model_name, model in models.items():
 
   model_stats[model_name] = {"accuracy": model_accuracy, "total_correct_words": correct_guesses_counter, "total_model_guesses": correct_guesses_counter + wrong_guesses_counter} # for analyzing the data later
 
+  # WRITE TO ANALYSIS FILE
   with open(reports_file_path, 'a') as file:
     file.write(f'{model_name},{vocab_size},{correct_guesses_counter},{model_accuracy*100:.1f}%\n')
 
@@ -110,14 +131,13 @@ print("\n********************\n")
 print(f'The analysis.csv has been sucessfully generated')
 
 
+# CHART PLOTTING SECTION
 model_names = list(model_stats.keys())
 accuracy = [model_stats[model]['accuracy'] for model in model_names]
 total_correct_words = [model_stats[model]['total_correct_words'] for model in model_names]
 total_model_guesses = [model_stats[model]['total_model_guesses'] for model in model_names]
 
 plt.figure(figsize=(14, 6))
-
-
 
 # Accuracy Bar Chart
 plt.subplot(1, 3, 1)
