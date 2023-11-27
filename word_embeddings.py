@@ -130,4 +130,48 @@ for model_name, model in models.items():
 print("\n********************\n")
 print(f'The analysis.csv has been sucessfully generated')
 
+# ANALYZE THE DATA
+model_names = list(model_stats.keys())
+accuracy = [model_stats[model]['accuracy'] for model in model_names]
+total_correct_words = [model_stats[model]['total_correct_words'] for model in model_names]
+total_model_guesses = [model_stats[model]['total_model_guesses'] for model in model_names]
 
+plt.figure(figsize=(14, 6))
+
+
+
+# Accuracy Bar Chart
+plt.subplot(1, 3, 1)
+plt.bar(model_names, accuracy, color='skyblue')
+plt.title('Model Accuracy Comparison')
+plt.xlabel('Model')
+plt.ylabel('Accuracy')
+plt.xticks(rotation=90)
+
+# Adding a horizontal line for the Human Gold-Standard at 88.5%
+plt.axhline(y=0.885, color='r', linestyle='-', label='Human Gold-Standard')
+plt.legend()
+
+# Adding a horizontal line for the Human Gold-Standard at 88.5%
+plt.axhline(y=0.25, color='y', linestyle='-', label='Ransom Baseline')
+plt.legend()
+
+# Total Model Guesses Bar Chart
+plt.subplot(1, 3, 2)
+plt.bar(model_names, total_correct_words, color='lightgreen')
+plt.title('Total Model Correct Words Comparison')
+plt.xlabel('Model')
+plt.ylabel('Total Correct Words')
+plt.xticks(rotation=90)
+
+# Total Model Guesses Bar Chart
+plt.subplot(1, 3,3)
+plt.bar(model_names, total_model_guesses, color='salmon')
+plt.title('Total Model Guesses Comparison')
+plt.xlabel('Model')
+plt.ylabel('Total Model Guesses')
+plt.xticks(rotation=90)
+
+plt.tight_layout()
+plt.savefig('model_comparison_charts.png')
+plt.show()
