@@ -1,0 +1,11 @@
+Model Name,Size of Vocabulary,#Correct Labels,Model Accuracy
+word2vec-google-news-300,3000000,70,88.6%
+glove-twitter-50,1193514,36,46.2%
+glove-twitter-25,1193514,36,46.2%
+nlpl_5_model-300,273992,51,83.6%
+nlpl_222_model-300,199807,64,81.0%
+task3-w10-e25,33218,31,46.3%
+task3-w10-e300,33218,35,52.2%
+task3-w30-e25,33218,30,44.8%
+task3-w30-e300,33218,33,49.3%
+ThesaurusBot30-300,6763,8,33.3%

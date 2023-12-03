@@ -69,7 +69,7 @@ try:
     model_name = model_file.rsplit('.', 1)[0]
     model = gensim.models.Word2Vec.load('./task3models/' + model_file)
     models[model_name] = model.wv
-
+  
 except:
   print('\n -- task 3 models not trained yet..\n!! RUN task3.py FIRST !!\n')
 
@@ -153,7 +153,7 @@ plt.axhline(y=0.885, color='r', linestyle='-', label='Human Gold-Standard')
 plt.legend()
 
 # Adding a horizontal line for the Human Gold-Standard at 88.5%
-plt.axhline(y=0.25, color='y', linestyle='-', label='Ransom Baseline')
+plt.axhline(y=0.25, color='y', linestyle='-', label='Random Baseline')
 plt.legend()
 
 # Total Model Guesses Bar Chart
@@ -175,3 +175,4 @@ plt.xticks(rotation=90)
 plt.tight_layout()
 plt.savefig('model_comparison_charts.png')
 plt.show()
+
