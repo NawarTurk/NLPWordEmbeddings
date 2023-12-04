@@ -2,8 +2,6 @@
 books/
 thesaurus/
 
-# ignoring these so they can be generated fresh and new each run
-model_comparison_charts.png
 
 
 # mac file thing
