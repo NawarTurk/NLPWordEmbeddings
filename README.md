@@ -1,9 +1,8 @@
 COMP472 A2
 
-- run word_embeddings.py (main project file)
+- RUN word_embeddings.py (this is all that is needed to get all output files for all tasks) **make sure you run it from project root directory
 
-if you want to retrain task3 models, you can run task3.py to create new ones
-then those changes will be reflected in word_embeddings.py!
+only run task3.py if you'd like to retrain the task3 models. you can do so by including your own 'books' folder in the project root directory with .txt files inside, then run task3.py to create, train, and save new models.
 
 books used to train task 3 models:  
 Wuthering Heights - Emily Brontë  
